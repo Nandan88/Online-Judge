@@ -22,15 +22,22 @@
     <h4>Output</h4>
     <p>Output n numbers in in increasing order</p>
     <label for="code">Code Your solution</label>
-    <div>
-    <textarea id="code" name="code" rows="25" cols="150">
-        
-        
+
+    <form method="Post" action="/problem1">  
+        {% csrf_token %}
+        <div class="container">   
+            <textarea id="code" name="code" rows="25" cols="150" method="POST"></textarea>
+            <button type="submit">Submit</button>
+        </div>   
+    </form>     
+
+    <!-- <div>
+    <textarea id="code" name="code" rows="25" cols="150" method="POST">
     </textarea>
     </div>
-    <!-- <div> -->
+    <div>
         <button type="submit">Submit</button>
-    <!-- </div> -->
+    </div> -->
     
 </body>
 </html>
