@@ -4,31 +4,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorted Array</title>
+    <title> {{problem.name}} </title>
 </head>
 <body>
     <a href="http://127.0.0.1:8000">Home</a>
     <a href="http://127.0.0.1:8000/dashboard">Dashboard</a>
     <h3>
-        Sorted Array
+        {{problem.name}}
     </h3>
-    <p>You are given n numbers each numbers Ai.Arrange this numbers in increasing order</p>
+    <p> {{problem.problem_statement}} </p>
     <h4>Constraints</h4>
     <ul>
-        <li>n>=1</li>
-        <li>-10^9 <= Ai <= 10^9</li>
-        <li>all numbers are unique</li>
+        {{problem.constraints}}
     </ul>
-    <h4>Input</h4>
+    {% comment %} <h4>Input</h4>
     <p>On first line n,on second line n numbers with space in between.</p>
     <h4>Output</h4>
     <p>Output n numbers in in increasing order</p>
-    <label for="code">Code Your solution</label>
+    <label for="code">Code Your solution</label> {% endcomment %}
 
-    <form method="Post" action="/problem1">  
+    {% comment %} <form method="Post" action="{% url 'problem_detail' problem.id %}">   {% endcomment %}
+    <form method="Post" action="{% url 'submit' problem.id %}">  
+    {% comment %} <form method="Post">   {% endcomment %}
         {% csrf_token %}
         <div class="container">   
-            <label for="cars">Choose a car:</label>
+            <label for="program_language">Choose a language:</label>
 
             <select name="languages" id="lang1">
                 <option value="Cpp">Cpp</option>
@@ -37,7 +37,7 @@
                 <option value="audi">Audi</option> {% endcomment %}
             </select>
 
-            <textarea id="code" name="code" rows="25" cols="150" method="POST"></textarea>
+            <textarea id="code" name="code" rows="25" cols="150"></textarea>
             <button type="submit">Submit</button>
         </div>   
     </form>     
