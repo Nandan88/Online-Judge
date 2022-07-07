@@ -1,8 +1,29 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        tr:nth-child(even) {
+  background-color: #5fa7a7;
+}
+tr {
+  border-bottom: 1px solid #ddd;
+}
+body{
+    background-color: #5fa7a7;
+}
+    </style>
+</head>
+<body>
+    {% block content %}
     <h1>Welcome {{user.username}}</h1>
-    <a href="http://127.0.0.1:8000">Home</a>
+    {% comment %} <a href="http://127.0.0.1:8000">Home</a> {% endcomment %}
     {% comment %} <ul>
         <li>
             <a href="http://127.0.0.1:8000/problem1">Sorted array</a>
@@ -10,12 +31,28 @@
     </ul> {% endcomment %}
     
     {% if problems_list %}
-    <ol>
+    <table style="width:100%" >
+        <tr>
+          <th style="width:50%">Problem</th>
+          <th>Difficulty</th>
+          <th>Solved</th>
+        </tr>
+        <td>hi</td>
+            <td>hello</td>
+            <td>hey</td>
         {% for problem in problems_list %}
-        <li> <a href="{% url 'problem_detail' problem.id %}">{{problem.name}} </a></li>
+        <tr>
+            <td><a href="{% url 'problem_detail' problem.id %}">{{problem.name}} </a></td>
+            <td>{{problem.input}}</td>
+            <td>{{problem.input}}</td>
+        </tr>
+        
+        {% comment %} <li> <a href="{% url 'problem_detail' problem.id %}">{{problem.name}} </a></li> {% endcomment %}
         {% endfor %}
-    </ol>
+    </table>
     {% else %}
     <p> No Problems available yet </p>
     {% endif %}
 {% endblock  %}
+</body>
+</html>

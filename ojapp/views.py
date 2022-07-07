@@ -40,29 +40,31 @@ def register(request):
 def problemDetail(request,problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
     return render(request,"details.html",{'problem':problem})
-    print(1)
 
 def submitProblem(request,problem_id):
     code1=request.POST.get("code")
-    # fin=open("E:\Django\OJ\ojapp\prob_in1.txt","w")
-    fin=open("E:\Django\OJ\ojapp\prob_in1.txt","r")  #input file me already input rakh diya
-    fout=open("E:\Django\OJ\ojapp\prob1_out.txt","w")
     problem = get_object_or_404(Problem,pk=problem_id)
-    # fin.write((problem.input))
+    infile='E:\Django\OJ\ojapp\\' + str(problem.code) +'.txt'
+
+    # fin=open("E:\Django\OJ\ojapp\prob_in1.txt","w")
+    fout=open("E:\Django\OJ\ojapp\prob1_out.txt","w")
+    # fin.write(problem.input)
+    # fin.close()
+    fin1=open(infile,"r")  #input file me already input rakh diya
     # print(problem.input)
     plang=request.POST.get("languages")
     if plang=="Python":
         f=open("solution1.py","w")
         f.write(str(code1))
         f.close()
-        subprocess.run(["python","solution1.py"],stdin=fin,stdout=fout,shell=True)
+        subprocess.run(["python","solution1.py"],stdin=fin1,stdout=fout,shell=True)
     elif plang=="Cpp":
         f1=open("E:\Django\OJ\ojapp\sol.cpp","w")
         f1.write(str(code1))
         f1.close()
         subprocess.run(["g++","E:\Django\OJ\ojapp\sol.cpp","-o","sol.exe"],shell=True)
-        subprocess.run([".\sol.exe"],stdin=fin,stdout=fout,shell=True)
-    fin.close()
+        subprocess.run([".\sol.exe"],stdin=fin1,stdout=fout,shell=True)
+    fin1.close()
     fout.close()
     faout=open("E:\Django\OJ\ojapp\prob_actualout.txt","w")
     faout.write(str(problem.output))
@@ -87,6 +89,9 @@ def submitProblem(request,problem_id):
 
 # def verdict(request,solution_id):
 #     solution=get_object_or_404(Solution,pk=solution_id)
+
+def leaderboard(request):
+    return render(request,'leaderboard.html')
 
 def problem1(request):
     # return HttpResponse("This is problem1")

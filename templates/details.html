@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +11,7 @@
 <body>
     <a href="http://127.0.0.1:8000">Home</a>
     <a href="http://127.0.0.1:8000/dashboard">Dashboard</a>
+    {% block content %}
     <h3>
         {{problem.name}}
     </h3>
@@ -28,7 +31,8 @@
     {% comment %} <form method="Post">   {% endcomment %}
         {% csrf_token %}
         <div class="container">   
-            <label for="program_language">Choose a language:</label>
+            <div style="margin: 5px; ">
+                <label for="program_language">Choose a language:</label>
 
             <select name="languages" id="lang1">
                 <option value="Cpp">Cpp</option>
@@ -36,8 +40,9 @@
                 {% comment %} <option value="mercedes">Mercedes</option>
                 <option value="audi">Audi</option> {% endcomment %}
             </select>
-
-            <textarea id="code" name="code" rows="25" cols="150"></textarea>
+            
+            </div>
+            <textarea id="code" name="code" rows="25" cols="150">Write Your Code Here</textarea>
             <button type="submit">Submit</button>
         </div>   
     </form>     
@@ -45,10 +50,11 @@
     <!-- <div>
     <textarea id="code" name="code" rows="25" cols="150" method="POST">
     </textarea>
-    </div>
-    <div>
-        <button type="submit">Submit</button>
-    </div> -->
-    
+</div>
+<div>
+    <button type="submit">Submit</button>
+</div> -->
+
+{% endblock  %}
 </body>
 </html>

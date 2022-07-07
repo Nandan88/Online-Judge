@@ -5,18 +5,57 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OJ Home</title>
+    <style>
+        /* h1{
+        } */
+        body{
+            margin: auto;
+            text-align: center;
+            background-color: rgb(167, 162, 239);
+        }
+        button {
+            text-align: center;
+        background-color: #3c3d3e;
+        /* color: white; */
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 300px;
+    }
+    button a{
+        color: white;
+    }
+    /* set a hover effect for the button*/
+     
+    button:hover {
+        opacity: 0.8;
+    }
+    </style>
 </head>
 <body>
     {% block content %}
-        <h1>Welcome to Home Page</h1>
+        <h1>Welcome to OJ</h1>
         
         {% if user.is_authenticated %}
-            <a href="{% url 'dashboard' %}">Dashboard</a>
+        <button>
+
+            <a href="{% url 'dashboard' %}">Problems</a>
+        </button>
+        <button>
+            
             <a href="{% url 'logout' %}">Logout</a>
+        </button>
 
         {%else%}
+        <button>
+
             <a href="{% url 'login_url' %}">Login</a><br>
+        </button>
+        <button>
+
             <a href="{% url 'register' %}">Register</a>
+        </button>
         {%endif%}
     {% endblock %}
 
