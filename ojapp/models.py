@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -10,7 +11,7 @@ from django.dispatch import receiver
 # Also app.py se name copy karke settings me Installed apps me daala
 
 class Score(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,default=1)
     points = models.IntegerField(default=0)
 
 @receiver(post_save, sender=User)
@@ -22,7 +23,6 @@ def create_user_score(sender, instance, created, **kwargs):
 def save_user_score(sender, instance, **kwargs):
     instance.score.save()
 
-
 class Problem(models.Model):
     name=models.CharField(max_length=200)
     # problem_statement=models.CharField(max_length=255)
@@ -32,6 +32,8 @@ class Problem(models.Model):
     input = models.TextField(max_length=25000,default=1)
     output = models.TextField(max_length=25000,default=1)
     difficult=models.IntegerField(default=1)
+    ppoint=models.IntegerField(default=5)
+
 
     def __str__(self):
         return self.name
@@ -40,8 +42,10 @@ class Solution(models.Model):
     username=models.ForeignKey(User,on_delete=models.CASCADE,default=1)
     problem = models.ForeignKey(Problem,on_delete=models.CASCADE)
     verdict=models.CharField(max_length=50)
+    solve=models.BooleanField(default=False)
     submitted_at=models.DateTimeField()
     # submitted_code=models.CharField(max_length=255)
+
     submitted_code=models.TextField(max_length=25000)
 
     def __str__(self):

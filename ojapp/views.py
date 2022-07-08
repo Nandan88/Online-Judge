@@ -12,7 +12,7 @@ import subprocess, filecmp
 
 from django.test import TestCase
 
-from .models import Problem,Solution
+from .models import Problem,Solution,Score
 
 # Create your views here.
 def index(request):
@@ -75,7 +75,22 @@ def submitProblem(request,problem_id):
         verdict='Accepted'
     else:
         verdict='Wrong Answer'
+    s=Solution.objects.filter(username=request.user,problem=problem,verdict='Accepted')
+    print(s.count())
+    if s.count()==0:
+        print(request.user)
+        sc=Score.objects.get(user=request.user)
+        print(sc)
+        if sc==None:
+            su=Score()
+            su.user=request.user
+            su.points=5
+            su.save()
+        else:
+            sc.points+=5
+            sc.save()
     solution=Solution()
+    solution.username=request.user
     solution.problem=problem
     solution.verdict=verdict
     # solution.submitted_at=timezone.
@@ -90,8 +105,16 @@ def submitProblem(request,problem_id):
 # def verdict(request,solution_id):
 #     solution=get_object_or_404(Solution,pk=solution_id)
 
+def logout(request):
+    request.user
+    return redirect('http://127.0.0.1:8000/')
+
 def leaderboard(request):
-    return render(request,'leaderboard.html')
+    # score = Score.objects.all().order_by('-points').values()
+    score = Score.objects.all().order_by('-points')
+    
+    context={'score':score}
+    return render(request,'leaderboard.html',context)
 
 def problem1(request):
     # return HttpResponse("This is problem1")
