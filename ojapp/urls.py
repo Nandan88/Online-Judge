@@ -12,6 +12,8 @@ urlpatterns = [
     # path("logout",views.logout,name="logout"),
     path('logout/',auth_views.LogoutView.as_view(template_name='index.html',next_page=None),name = 'logout'),
     path("dashboard",views.dashboard,name="dashboard"),
+    path("submission",views.submission,name="submission"),
+    path("submission/<int:solution_id>/",views.subcode,name="subcode"),
     # path("problems",views.problems,name='problem_detail')
     path("dashboard/<int:problem_id>/",views.problemDetail,name="problem_detail"),
     path("dashboard/<int:problem_id>/submit",views.submitProblem,name="submit"),

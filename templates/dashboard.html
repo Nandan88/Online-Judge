@@ -35,18 +35,22 @@ body{
         <h2 class="text-center">Problems</h2>
         <table style="width:100%" >
             <tr>
+              <th>S.no.</th>
               <th style="width:50%">Problem</th>
               <th>Difficulty</th>
-              <th>Solved</th>
+              <th>Verdict</th>
             </tr>
-            <td>hi</td>
-                <td>hello</td>
-                <td>hey</td>
             {% for problem in problems_list %}
             <tr>
-                <td><a href="{% url 'problem_detail' problem.id %}">{{problem.name}} </a></td>
-                <td>{{problem.input}}</td>
-                <td>{{problem.input}}</td>
+                <td>{{forloop.counter}}</td>
+                <td><a class="text-decoration-none" href="{% url 'problem_detail' problem.id %}" >{{problem.name}} </a></td>
+                <td>{{problem.difficult}}</td>    
+                {% comment %} <td>Unsolved</td> {% endcomment %}
+                {% if problem in solution %}
+                    <td>Solved</td>
+                {% else %}
+                    <td>Unsolved</td>
+                {% endif %}
             </tr>
             
             {% comment %} <li> <a href="{% url 'problem_detail' problem.id %}">{{problem.name}} </a></li> {% endcomment %}

@@ -23,7 +23,7 @@
         cursor: pointer;
         width: 300px;
     }
-    button a{
+    a button{
         color: white;
     }
     /* set a hover effect for the button*/
@@ -38,24 +38,21 @@
         <h1>Welcome to OJ</h1>
         
         {% if user.is_authenticated %}
-        <button>
-
-            <a href="{% url 'dashboard' %}">Problems</a>
-        </button>
-        <button>
-            <a href="{% url 'logout' %}">Logout</a>
-            {% comment %} <a href="http://127.0.0.1:8000/">Logout</a> {% endcomment %}
-        </button>
-
+        <a href="{% url 'dashboard' %}">
+            <button>Problems</button>
+        </a>
+        <a href="{% url 'logout' %}">
+            <button>Logout</button>
+        </a>
+        {% comment %} <a href="http://127.0.0.1:8000/">Logout</a> {% endcomment %}
+    
         {%else%}
-        <button>
-
-            <a href="{% url 'login_url' %}">Login</a><br>
-        </button>
-        <button>
-
-            <a href="{% url 'register' %}">Register</a>
-        </button>
+        <a href="{% url 'login_url' %}">
+        <button>Login<br></button>
+        </a>
+        <a href="{% url 'register' %}">
+            <button>Register</button>
+        </a>
         {%endif%}
     {% endblock %}
 

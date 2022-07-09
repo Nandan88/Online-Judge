@@ -31,7 +31,7 @@ class Problem(models.Model):
     code=models.CharField(max_length=255)
     input = models.TextField(max_length=25000,default=1)
     output = models.TextField(max_length=25000,default=1)
-    difficult=models.IntegerField(default=1)
+    difficult=models.CharField(max_length=25)
     ppoint=models.IntegerField(default=5)
 
 

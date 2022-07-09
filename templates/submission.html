@@ -66,24 +66,29 @@ tr:nth-child(even) {
         </a>
     </div>
     <div class="container my-3">
-        <h2 class="text-center">Leaderboard</h2>
+        <h2 class="text-center">Your Submissions</h2>
         <table class="table">
             <thead>
               <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">UserName</th>
-                <th scope="col">Score</th>
-                <!-- <th scope="col">Handle</th> -->
+                <th scope="col">S.no.</th>
+                <th scope="col">Problem</th>
+                <th scope="col">Verdict</th>
+                <th scope="col">Date/Time</th>
+                <th scope="col">Code</th>
               </tr>
             </thead>
             <tbody>
                 
-                {% for point in score %}
+                {% for sol in solution %}
                     <tr>
                         <th scope="row">{{forloop.counter}}</th>
-                        <td>{{point.user.username}}</td>
-                        <td>{{point.points}}</td>
-                        <!-- <td>@mdo</td> -->
+                        <td>{{sol.problem.name}}</td>
+                        <td>{{sol.verdict}}</td>
+                        <td>{{sol.submitted_at}}</td>
+                        <form method="POST" action="{% url 'subcode' sol.id %}">
+                             {% csrf_token %}
+                            <td><button type="subcode"  class="btn btn-primary">Code</button></td>
+                        </form>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -96,37 +101,4 @@ tr:nth-child(even) {
 
 
 
-{% comment %} {% extends 'base.html' %}
 
-{% block content %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-<table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td colspan="2">Larry the Bird</td>
-        <td>@twitter</td>
-      </tr>
-    </tbody>
-  </table>
-{% endblock  %} {% endcomment %}

@@ -1,6 +1,7 @@
 from sys import stdout
 # from time import timezone
 from datetime import datetime
+from webbrowser import get
 # import pytz
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import get_object_or_404, render,redirect
@@ -14,6 +15,8 @@ from django.test import TestCase
 
 from .models import Problem,Solution,Score
 
+# If user info needed then just do request.user and current user ka instance mil jayega usse baaki info le skte like username email.
+
 # Create your views here.
 def index(request):
     return  render(request,'index.html')
@@ -21,7 +24,13 @@ def index(request):
 # @login_required
 def dashboard(request):
     problems_list=Problem.objects.all()
-    context={'problems_list':problems_list}
+    # solution=Solution.objects.all()
+    solution=[]
+    for p in problems_list:
+        s=Solution.objects.filter(problem=p,username=request.user,verdict='Accepted')
+        if s.count()>0:
+            solution.append(p)
+    context={'problems_list':problems_list,'solution':solution}
     return render(request,'dashboard.html',context)
 
 def register(request):
@@ -106,8 +115,18 @@ def submitProblem(request,problem_id):
 #     solution=get_object_or_404(Solution,pk=solution_id)
 
 def logout(request):
-    request.user
+    # request.user
     return redirect('http://127.0.0.1:8000/')
+
+def submission(request):
+    solution=Solution.objects.filter(username=request.user).order_by('submitted_at')
+    context={'solution':solution}
+    return render(request,'submission.html',context)
+
+def subcode(request,solution_id):
+    solution=get_object_or_404(Solution,pk=solution_id)
+    context={'solution':solution}
+    return render(request,'subcode.html',context)
 
 def leaderboard(request):
     # score = Score.objects.all().order_by('-points').values()
