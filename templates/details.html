@@ -1,16 +1,6 @@
 {% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {{problem.name}} </title>
-</head>
-<body>
-    <a href="http://127.0.0.1:8000">Home</a>
-    <a href="http://127.0.0.1:8000/dashboard">Dashboard</a>
+    {% block title %}{{problem.name}}{% endblock  %}
     {% block content %}
     <h3>
         {{problem.name}}
@@ -20,15 +10,7 @@
     <ul>
         {{problem.constraints}}
     </ul>
-    {% comment %} <h4>Input</h4>
-    <p>On first line n,on second line n numbers with space in between.</p>
-    <h4>Output</h4>
-    <p>Output n numbers in in increasing order</p>
-    <label for="code">Code Your solution</label> {% endcomment %}
-
-    {% comment %} <form method="Post" action="{% url 'problem_detail' problem.id %}">   {% endcomment %}
     <form method="Post" action="{% url 'submit' problem.id %}">  
-    {% comment %} <form method="Post">   {% endcomment %}
         {% csrf_token %}
         <div class="container">   
             <div style="margin: 5px; ">
@@ -37,24 +19,14 @@
             <select name="languages" id="lang1">
                 <option value="Cpp">Cpp</option>
                 <option value="Python">Python</option>
-                {% comment %} <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option> {% endcomment %}
             </select>
             
             </div>
             <textarea id="code" name="code" rows="25" cols="150">Write Your Code Here</textarea>
-            <button type="submit">Submit</button>
+            <div>
+            <button type="submit" class="btn btn-primary" style="margin: 12px;">Submit</button>
+            </div>
         </div>   
     </form>     
 
-    <!-- <div>
-    <textarea id="code" name="code" rows="25" cols="150" method="POST">
-    </textarea>
-</div>
-<div>
-    <button type="submit">Submit</button>
-</div> -->
-
 {% endblock  %}
-</body>
-</html>

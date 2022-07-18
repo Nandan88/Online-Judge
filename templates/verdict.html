@@ -1,14 +1,7 @@
 {% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verdict {{solution.problem.name}}</title>
-</head>
-<body>
+
+     {% block title %}Verdict {{solution.problem.name}}{% endblock  %} 
     {% block content %}
     <h1>Verdict : {{solution.verdict}} </h1>
     {% endblock  %}

@@ -1,6 +1,7 @@
 from sys import stdout
 # from time import timezone
 from datetime import datetime
+from typing import Container
 from webbrowser import get
 # import pytz
 from django.http import HttpResponseRedirect,HttpResponse
@@ -12,6 +13,11 @@ from django.contrib.auth.decorators import login_required
 import subprocess, filecmp
 from django.conf import settings
 from django.test import TestCase
+import docker
+
+client=docker.from_env()
+img_py='python'
+img_gcc='gcc'
 
 from .models import Problem,Solution,Score
 
@@ -21,7 +27,7 @@ from .models import Problem,Solution,Score
 def index(request):
     return  render(request,'index.html')
 
-# @login_required
+@login_required
 def dashboard(request):
     problems_list=Problem.objects.all()
     # solution=Solution.objects.all()
@@ -46,10 +52,12 @@ def register(request):
 
 # def problems(request):
 
+@login_required
 def problemDetail(request,problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
     return render(request,"details.html",{'problem':problem})
 
+@login_required
 def submitProblem(request,problem_id):
     code1=request.POST.get("code")
     problem = get_object_or_404(Problem,pk=problem_id)
@@ -64,6 +72,7 @@ def submitProblem(request,problem_id):
         # fin1=open(infile,"r")  #input file me already input rakh diya
     data=problem.input
     res = bytes(data, 'utf-8')
+    verdict='i'
     if plang=="Python":
         f=open(settings.BASE_DIR/"ojapp\solution1.py","w")
         f.write(str(code1))
@@ -71,30 +80,54 @@ def submitProblem(request,problem_id):
         # docker rm py_cont    # This will remove previous container with this name
         # docker run -it --name py_cont python
         # container should be running ans its name should be py_cont ,use above command 
-        subprocess.run(["docker","cp",settings.BASE_DIR/"ojapp\solution1.py","py_cont:/sol1.py"],shell=True)
-        subprocess.run(["docker","exec","-i","py_cont","python","sol1.py"],input=res,stdout=fout,shell=True)
-        subprocess.run(["docker","exec","py_cont","rm","-rf","sol1.py"])
+            # docker run is equals create+start
+            # Now container will be created automatically if running or not created
+        try:
+            container:Container=client.containers.get('py_cont')
+            if container.status!='running':
+                container.start()
+        except docker.errors.NotFound:
+            container=client.containers.run(img_py,detach=True,tty=True,name='py_cont')
+        try:
+            subprocess.run(["docker","cp",settings.BASE_DIR/"ojapp\solution1.py","py_cont:/sol1.py"],shell=True) # copy file
+            subprocess.run(["docker","exec","-i","py_cont","python","sol1.py"],input=res,stdout=fout,shell=True,timeout=2) # i means interactive
+            subprocess.run(["docker","exec","py_cont","rm","-rf","sol1.py"]) # removing file 
+        except:
+            verdict='Time Limit Exceeded'
+            fout.write(verdict)
     elif plang=="Cpp":
         # settings.B
         f1=open(settings.BASE_DIR/'ojapp/sol.cpp',"w")
         f1.write(str(code1))
         f1.close()    
-        subprocess.run(["docker","cp",settings.BASE_DIR/"ojapp\sol.cpp","cpp_cont:/sol.cpp"])
-        subprocess.run(["docker","exec","-i","cpp_cont","g++","sol.cpp","-o","./sol" ],shell=True)
-        subprocess.run(["docker","exec","-i","cpp_cont","./sol" ],input=res,stdout=fout,shell=True)
-        subprocess.run(["docker","exec","cpp_cont","rm","-rf","sol.cpp"])
-        subprocess.run(["docker","exec","cpp_cont","rm","-rf","sol"])
+        try:
+            container:Container=client.containers.get('cpp_cont')
+            if container.status!='running':
+                container.start()
+        except docker.errors.NotFound:
+            container=client.containers.run(img_gcc,detach=True,tty=True,name='cpp_cont')
+        try:
+            subprocess.run(["docker","cp",settings.BASE_DIR/"ojapp\sol.cpp","cpp_cont:/sol.cpp"])
+            subprocess.run(["docker","exec","-i","cpp_cont","g++","sol.cpp","-o","./sol" ],shell=True,timeout=2)
+            subprocess.run(["docker","exec","-i","cpp_cont","./sol" ],input=res,stdout=fout,shell=True,timeout=2)
+            subprocess.run(["docker","exec","cpp_cont","rm","-rf","sol.cpp"])
+            subprocess.run(["docker","exec","cpp_cont","rm","-rf","sol"])
+        except:
+            verdict='Time Limit Exceeded'
+            fout.write(verdict)
+
     # fin1.close()
     fout.close()
-    faout=open(settings.BASE_DIR/"ojapp\prob_actualout.txt","w")
+    faout=open(settings.BASE_DIR/"ojapp/prob_actualout.txt","w")
     faout.write(str(problem.output))
     faout.close()
-    out1="E:\Django\OJ\ojapp\prob_actualout.txt"
-    out2="E:\Django\OJ\ojapp\prob1_out.txt"
-    if (filecmp.cmp(out1,out2)):
-        verdict='Accepted'
-    else:
-        verdict='Wrong Answer'
+    out1=settings.BASE_DIR/"ojapp/prob_actualout.txt"
+    out2=settings.BASE_DIR/"ojapp\prob1_out.txt"
+    if verdict!='Time Limit Exceeded':
+        if (filecmp.cmp(out1,out2)):
+            verdict='Accepted'
+        else:
+            verdict='Wrong Answer'
     s=Solution.objects.filter(username=request.user,problem=problem,verdict='Accepted')
     # print(s.count())
     if s.count()==0:
@@ -190,20 +223,24 @@ def submitProblem(request,problem_id):
 # # def verdict(request,solution_id):
 # #     solution=get_object_or_404(Solution,pk=solution_id)
 
+@login_required
 def logout(request):
     # request.user
     return redirect('http://127.0.0.1:8000/')
 
+@login_required
 def submission(request):
     solution=Solution.objects.filter(username=request.user).order_by('submitted_at')
     context={'solution':solution}
     return render(request,'submission.html',context)
 
+@login_required
 def subcode(request,solution_id):
     solution=get_object_or_404(Solution,pk=solution_id)
     context={'solution':solution}
     return render(request,'subcode.html',context)
 
+@login_required
 def leaderboard(request):
     # score = Score.objects.all().order_by('-points').values()
     score = Score.objects.all().order_by('-points')

@@ -1,26 +1,6 @@
 {% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=
-    , initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        tr:nth-child(even) {
-  background-color: #5fa7a7;
-}
-tr {
-  border-bottom: 1px solid #ddd;
-}
-body{
-    background-color: #5fa7a7;
-}
-    </style>
-</head>
-<body>
+    {% block title %}Dashboard{% endblock  %}
     {% block content %}
     <h1>Welcome {{user.username}}</h1>
     {% comment %} <a href="http://127.0.0.1:8000">Home</a> {% endcomment %}
@@ -61,5 +41,3 @@ body{
     <p> No Problems available yet </p>
     {% endif %}
 {% endblock  %}
-</body>
-</html>
