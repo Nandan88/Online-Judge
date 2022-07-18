@@ -14,6 +14,7 @@ import subprocess, filecmp
 from django.conf import settings
 from django.test import TestCase
 import docker
+import sys
 
 client=docker.from_env()
 img_py='python'
@@ -121,10 +122,37 @@ def submitProblem(request,problem_id):
     faout=open(settings.BASE_DIR/"ojapp/prob_actualout.txt","w")
     faout.write(str(problem.output))
     faout.close()
-    out1=settings.BASE_DIR/"ojapp/prob_actualout.txt"
-    out2=settings.BASE_DIR/"ojapp\prob1_out.txt"
+    
+    outp=""
+    with open(settings.BASE_DIR/"ojapp/prob1_out.txt") as f:
+        for line in f:
+            if not line.isspace():
+                outp+=line
+    outp.strip()       
+    while(outp.endswith('\n')):
+        outp=outp[:-1]
+    f= open("E:\Django\OJ Project\Online-Judge\ojapp\prob1_out.txt","w")
+    f.write(str(outp))
+    
+    outp2=""
+    with open(settings.BASE_DIR/"ojapp/prob_actualout.txt") as f:
+        for line in f:
+            if not line.isspace():
+                outp2+=line
+    outp2.strip()     
+
+    while(outp2.endswith('\n')):
+        outp2=outp2[:-1]
+    # f= open(settings.BASE_DIR/"ojapp/prob_actualout.txt","w")
+    # # f.write(str(outp2))
+    # f.close()
+
+    # out1=settings.BASE_DIR/"ojapp/prob_actualout.txt"
+    # out2=settings.BASE_DIR/"ojapp/prob1_out.txt"
     if verdict!='Time Limit Exceeded':
-        if (filecmp.cmp(out1,out2)):
+        
+        # if (filecmp.cmp(out1,out2)):
+        if (outp==outp2):
             verdict='Accepted'
         else:
             verdict='Wrong Answer'
