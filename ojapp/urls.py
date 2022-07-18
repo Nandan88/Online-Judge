@@ -19,5 +19,5 @@ urlpatterns = [
     path("dashboard/<int:problem_id>/submit",views.submitProblem,name="submit"),
     path("leaderboard",views.leaderboard,name="leaderboard"),
     # path("verdict/<int:solution_id>/",views.verdict,name="verdict"),
-    path("problem1",views.problem1,name='problem1')
+    # path("problem1",views.problem1,name='problem1')
 ]

@@ -1,12 +1,81 @@
-{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OJ Home</title>
+    <style>
+        h1{
+            text-align: center;
+        }
+        div{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        body{
+            margin: auto;
+            font-size: large;
+            background-color: rgb(193, 189, 255);
+        }
+        button {
+            display: inline;
+            text-align: center;
+        background-color: #3c3d3e;
+        padding: 14px 20px;
+        margin: 10px 198px;
+        border: none;
+        cursor: pointer;
+        width: 300px;
+    }
+    form p span{
+        margin: 10px;
+    }
+    form p input{
+        display: flex;
+        border: 2px solid black;
+        margin: 10px;
+    }
+    button{
+        color: white;
+    }
+    /* set a hover effect for the button*/
+    /* body p{
+        text-align: ;
+    } */
+    button:hover {
+        opacity: 0.8;
+    }
+    </style>
+</head>
+<body>
+    <h1>Create new Account</h1>
+    <div>
+        <form method="POST" style="list-style:none">
+            {% csrf_token %}
+            
+            {{form.as_p}}
+            
+            <button>Register</button>
+        </form>
+    </div>
+    <p style="text-align: center;">Already have account <a href="http://127.0.0.1:8000/" >Login</a> </p>
+</body>
+</html>
+
+
+
+
+{% comment %} {% extends 'index.html' %}
 
 {% block content %}
 <h1>Create new Account</h1>
-<form method="POST">
+<form method="POST" style="list-style:none">
     {% csrf_token %}
     
     {{form.as_p}}
 
     <button>Register</button>
 </form>
-{% endblock %}
+{% endblock %} {% endcomment %}
