@@ -124,8 +124,8 @@ def submitProblem(request,problem_id):
     outp.strip()       
     while(outp.endswith('\n')):
         outp=outp[:-1]
-    f= open(settings.BASE_DIR/"/ojapp/prob1_out.txt","w")
-    f.write(str(outp))
+    with open(settings.BASE_DIR/"ojapp/prob1_out.txt","w") as f:
+        f.write(str(outp))
     
     outp2=""
     with open(settings.BASE_DIR/"ojapp/prob_actualout.txt") as f:
