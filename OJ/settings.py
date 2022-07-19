@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -77,11 +78,18 @@ WSGI_APPLICATION = 'OJ.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'OJdata',
-        'USER':'postgres',
-        'PASSWORD':'admin@12',
-        'HOST':'localhost',
+        'NAME': 'd2tnqul8rojaab',
+        'USER':'rxgqsohepvfxlm',
+        'PASSWORD':'71c006a628bbb1e819f7564b8dcfa8ab5da19abd451f0f35d497f70fbdc0afc4',
+        'HOST':'ec2-3-219-229-143.compute-1.amazonaws.com',
         'PORT' : '5432'
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'OJdata',
+    #     'USER':'postgres',
+    #     'PASSWORD':'admin@12',
+    #     'HOST':'localhost',
+    #     'PORT' : '5432'
     }
 }
 
