@@ -64,18 +64,3 @@
 </body>
 </html>
 
-
-
-
-{% comment %} {% extends 'index.html' %}
-
-{% block content %}
-<h1>Create new Account</h1>
-<form method="POST" style="list-style:none">
-    {% csrf_token %}
-    
-    {{form.as_p}}
-
-    <button>Register</button>
-</form>
-{% endblock %} {% endcomment %}

@@ -3,13 +3,7 @@
     {% block title %}Dashboard{% endblock  %}
     {% block content %}
     <h1>Welcome {{user.username}}</h1>
-    {% comment %} <a href="http://127.0.0.1:8000">Home</a> {% endcomment %}
-    {% comment %} <ul>
-        <li>
-            <a href="http://127.0.0.1:8000/problem1">Sorted array</a>
-        </li>
-    </ul> {% endcomment %}
-    
+   
     {% if problems_list %}
     <div class="container my-3">
         <h2 class="text-center">Problems</h2>
@@ -25,7 +19,7 @@
                 <td>{{forloop.counter}}</td>
                 <td><a class="text-decoration-none" href="{% url 'problem_detail' problem.id %}" >{{problem.name}} </a></td>
                 <td>{{problem.difficult}}</td>    
-                {% comment %} <td>Unsolved</td> {% endcomment %}
+                
                 {% if problem in solution %}
                     <td>Solved</td>
                 {% else %}
@@ -33,7 +27,7 @@
                 {% endif %}
             </tr>
             
-            {% comment %} <li> <a href="{% url 'problem_detail' problem.id %}">{{problem.name}} </a></li> {% endcomment %}
+            
             {% endfor %}
         </table>
     </div>
