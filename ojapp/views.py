@@ -62,12 +62,16 @@ def problemDetail(request,problem_id):
 def submitProblem(request,problem_id):
     code1=request.POST.get("code")
     problem = get_object_or_404(Problem,pk=problem_id)
-    fout=open(settings.BASE_DIR/"ojapp\prob1_out.txt","w")
+    fout=open(settings.BASE_DIR/"ojapp/prob1_out.txt","w")
     plang=request.POST.get("languages")
     data=problem.input
     res = bytes(data, 'utf-8')
     verdict='i'
-    if plang=="Python":
+    if plang=="Cpp":
+        f1=open(settings.BASE_DIR/'ojapp/sol.cpp',"w")
+        f1.write(str(code1))
+        f1.close()
+    elif plang=="Python":
         f=open(settings.BASE_DIR/"ojapp\solution1.py","w")
         f.write(str(code1))
         f.close()
