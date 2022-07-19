@@ -124,7 +124,7 @@ def submitProblem(request,problem_id):
     outp.strip()       
     while(outp.endswith('\n')):
         outp=outp[:-1]
-    f= open("E:\Django\OJ Project\Online-Judge\ojapp\prob1_out.txt","w")
+    f= open(settings.BASE_DIR/"/ojapp/prob1_out.txt","w")
     f.write(str(outp))
     
     outp2=""
@@ -180,7 +180,7 @@ def submitProblem(request,problem_id):
 @login_required
 def logout(request):
     # request.user
-    return redirect('http://127.0.0.1:8000/')
+    return redirect('home')
 
 @login_required
 def submission(request):
