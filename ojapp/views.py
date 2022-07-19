@@ -62,17 +62,13 @@ def problemDetail(request,problem_id):
 def submitProblem(request,problem_id):
     code1=request.POST.get("code")
     problem = get_object_or_404(Problem,pk=problem_id)
-    fout=open(settings.BASE_DIR/"ojapp/prob1_out.txt","w")
+    fout=open(str(settings.BASE_DIR)+"/"+"ojapp\prob1_out.txt","w")
     plang=request.POST.get("languages")
     data=problem.input
     res = bytes(data, 'utf-8')
     verdict='i'
-    if plang=="Cpp":
-        f1=open(settings.BASE_DIR/'ojapp/sol.cpp',"w")
-        f1.write(str(code1))
-        f1.close()
-    elif plang=="Python":
-        f=open(settings.BASE_DIR/"ojapp\solution1.py","w")
+    if plang=="Python":
+        f=open(str(settings.BASE_DIR)+"/"+"ojapp/solution1.py","w")
         f.write(str(code1))
         f.close()
         # docker rm py_cont    # This will remove previous container with this name
@@ -87,7 +83,7 @@ def submitProblem(request,problem_id):
         except docker.errors.NotFound:
             container=client.containers.run(img_py,detach=True,tty=True,name='py_cont')
         try:
-            subprocess.run(["docker","cp",settings.BASE_DIR/"ojapp\solution1.py","py_cont:/sol1.py"],shell=True) # copy file
+            subprocess.run(["docker","cp",str(settings.BASE_DIR)+"/"+"ojapp/solution1.py","py_cont:/sol1.py"],shell=True) # copy file
             subprocess.run(["docker","exec","-i","py_cont","python","sol1.py"],input=res,stdout=fout,shell=True,timeout=2) # i means interactive
             subprocess.run(["docker","exec","py_cont","rm","-rf","sol1.py"]) # removing file 
         except:
@@ -95,7 +91,7 @@ def submitProblem(request,problem_id):
             fout.write(verdict)
     elif plang=="Cpp":
         # settings.B
-        f1=open(settings.BASE_DIR/'ojapp/sol.cpp',"w")
+        f1=open(str(settings.BASE_DIR)+"/"+'ojapp/sol.cpp',"w")
         f1.write(str(code1))
         f1.close()    
         try:
@@ -106,11 +102,11 @@ def submitProblem(request,problem_id):
             container=client.containers.run(img_gcc,detach=True,tty=True,name='cpp_cont')
         try:
             subprocess.run(["docker","cp",str(settings.BASE_DIR)+"/"+"ojapp/sol.cpp","cpp_cont:/sol.cpp"])
-            subprocess.run(["docker","exec","-i","cpp_cont","g++","sol.cpp","-o","./sol" ],shell=True,timeout=2)
+            
+            # subprocess.run(["docker","exec","-i","cpp_cont","g++","sol.cpp","-o","./sol" ],shell=True,timeout=2)
             # subprocess.run(["docker","exec","-i","cpp_cont","./sol" ],input=res,stdout=fout,shell=True,timeout=2)
-            subprocess.run(["docker","exec","-i","cpp_cont","./sol" ],input=res,stdout=fout,shell=True,timeout=2)
-            subprocess.run(["docker","exec","cpp_cont","rm","-rf","sol.cpp"])
-            subprocess.run(["docker","exec","cpp_cont","rm","-rf","sol"])
+            # subprocess.run(["docker","exec","cpp_cont","rm","-rf","sol.cpp"])
+            # subprocess.run(["docker","exec","cpp_cont","rm","-rf","sol"])
         except:
             verdict='Time Limit Exceeded'
             fout.write(verdict)
@@ -129,9 +125,9 @@ def submitProblem(request,problem_id):
     outp.strip()       
     while(outp.endswith('\n')):
         outp=outp[:-1]
-    with open(str(settings.BASE_DIR)+"/"+"ojapp/prob1_out.txt","w") as f:
-        f.write(str(outp))
-    
+    f1= open(str(settings.BASE_DIR)+"/"+"ojapp/prob1_out.txt","w")
+    f1.write(str(outp))
+    f1.close()
     outp2=""
     with open(str(settings.BASE_DIR)+"/"+"ojapp/prob_actualout.txt") as f:
         for line in f:
@@ -141,12 +137,12 @@ def submitProblem(request,problem_id):
 
     while(outp2.endswith('\n')):
         outp2=outp2[:-1]
-    # f= open(settings.BASE_DIR/"ojapp/prob_actualout.txt","w")
+    # f= open(str(settings.BASE_DIR)+"/"+"ojapp/prob_actualout.txt","w")
     # # f.write(str(outp2))
     # f.close()
 
-    # out1=settings.BASE_DIR/"ojapp/prob_actualout.txt"
-    # out2=settings.BASE_DIR/"ojapp/prob1_out.txt"
+    # out1=str(settings.BASE_DIR)+"/"+"ojapp/prob_actualout.txt"
+    # out2=str(settings.BASE_DIR)+"/"+"ojapp/prob1_out.txt"
     if verdict!='Time Limit Exceeded':
         
         # if (filecmp.cmp(out1,out2)):
@@ -163,10 +159,14 @@ def submitProblem(request,problem_id):
         if sc==None:
             su=Score()
             su.user=request.user
-            su.points=5
+            if verdict=='Accepted':
+                su.points=5
+            else:
+                su.points=0
             su.save()
         else:
-            sc.points+=5
+            if verdict=='Accepted':
+                sc.points+=5
             sc.save()
     solution=Solution()
     solution.username=request.user
