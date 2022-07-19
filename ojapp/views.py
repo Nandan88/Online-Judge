@@ -83,7 +83,7 @@ def submitProblem(request,problem_id):
         f.write(str(code1))
         f.close()
         try:
-            subprocess.run(["python","solution1.py"],input=res,stdout=fout,shell=True,timeout=3) # i means interactive
+            subprocess.run(["python","solution1.py"],input=res,stdout=fout,shell=True) # i means interactive
         except:
             verdict='Time Limit Exceeded'
             fout.write(verdict)
@@ -94,8 +94,8 @@ def submitProblem(request,problem_id):
         f1.close()
 
         try:
-            subprocess.run(["g++",str(settings.BASE_DIR)+"/"+"ojapp\sol.cpp","-o","sol.exe"],shell=True,timeout=5)
-            subprocess.run([".\sol.exe"],input=res,stdout=fout,shell=True,timeout=5)
+            subprocess.run(["g++",str(settings.BASE_DIR)+"/"+"ojapp\sol.cpp","-o","sol.exe"],shell=True)
+            subprocess.run([".\sol.exe"],input=res,stdout=fout,shell=True)
             # subprocess.run(["g++","E:\Django\OJ\ojapp\sol.cpp","-o","sol.exe"],shell=True)
             # subprocess.run([".\sol.exe"],stdin=fin1,stdout=fout,shell=True)
         except:
@@ -159,7 +159,6 @@ def submitProblem(request,problem_id):
     # out1=str(settings.BASE_DIR)+"/"+"ojapp/prob_actualout.txt"
     # out2=str(settings.BASE_DIR)+"/"+"ojapp/prob1_out.txt"
     if verdict!='Time Limit Exceeded':
-        
         # if (filecmp.cmp(out1,out2)):
         if (outp==outp2):
             verdict='Accepted'
@@ -195,7 +194,7 @@ def submitProblem(request,problem_id):
 
     # return HttpResponseRedirect(reverse('dashboard'))
     return render(request,'verdict.html',{'solution':solution})
-
+    
 
 # @login_required
 # def submitProblem(request,problem_id):
