@@ -101,8 +101,9 @@ def submitProblem(request,problem_id):
         except docker.errors.NotFound:
             container=client.containers.run(img_gcc,detach=True,tty=True,name='cpp_cont')
         try:
-            subprocess.run(["docker","cp",settings.BASE_DIR/"ojapp\sol.cpp","cpp_cont:/sol.cpp"])
+            subprocess.run(["docker","cp",str(settings.BASE_DIR)+"/"+"ojapp/sol.cpp","cpp_cont:/sol.cpp"])
             subprocess.run(["docker","exec","-i","cpp_cont","g++","sol.cpp","-o","./sol" ],shell=True,timeout=2)
+            # subprocess.run(["docker","exec","-i","cpp_cont","./sol" ],input=res,stdout=fout,shell=True,timeout=2)
             subprocess.run(["docker","exec","-i","cpp_cont","./sol" ],input=res,stdout=fout,shell=True,timeout=2)
             subprocess.run(["docker","exec","cpp_cont","rm","-rf","sol.cpp"])
             subprocess.run(["docker","exec","cpp_cont","rm","-rf","sol"])
@@ -112,23 +113,23 @@ def submitProblem(request,problem_id):
 
     # fin1.close()
     fout.close()
-    faout=open(settings.BASE_DIR/"ojapp/prob_actualout.txt","w")
+    faout=open(str(settings.BASE_DIR)+"/"+"ojapp/prob_actualout.txt","w")
     faout.write(str(problem.output))
     faout.close()
     
     outp=""
-    with open(settings.BASE_DIR/"ojapp/prob1_out.txt") as f:
+    with open(str(settings.BASE_DIR)+"/"+"ojapp/prob1_out.txt") as f:
         for line in f:
             if not line.isspace():
                 outp+=line
     outp.strip()       
     while(outp.endswith('\n')):
         outp=outp[:-1]
-    with open(settings.BASE_DIR/"ojapp/prob1_out.txt","w") as f:
+    with open(str(settings.BASE_DIR)+"/"+"ojapp/prob1_out.txt","w") as f:
         f.write(str(outp))
     
     outp2=""
-    with open(settings.BASE_DIR/"ojapp/prob_actualout.txt") as f:
+    with open(str(settings.BASE_DIR)+"/"+"ojapp/prob_actualout.txt") as f:
         for line in f:
             if not line.isspace():
                 outp2+=line
