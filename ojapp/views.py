@@ -16,6 +16,7 @@ from django.test import TestCase
 import docker
 import sys
 
+
 client=docker.from_env()
 img_py='python'
 img_gcc='gcc'
@@ -23,6 +24,7 @@ img_gcc='gcc'
 from .models import Problem,Solution,Score
 
 # If user info needed then just do request.user and current user ka instance mil jayega usse baaki info le skte like username email.
+# python manage.py runserver    Use this to start project,install django,postgres,docker,gcc,python
 
 # Create your views here.
 def index(request):
@@ -58,17 +60,8 @@ def problemDetail(request,problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
     return render(request,"details.html",{'problem':problem})
 
+@login_required
 def submitProblem(request,problem_id):
-    
-    # problem = get_object_or_404(Problem,pk=problem_id)
-
-    # # fin=open("E:\Django\OJ\ojapp\prob_in1.txt","w")
-    # fout=open("E:\Django\OJ\ojapp\prob1_out.txt","w")
-    # # fin.write(problem.input)
-    # # fin.close()
-    # # print(problem.input)
-    # plang=request.POST.get("languages")
-
     code1=request.POST.get("code")
     problem = get_object_or_404(Problem,pk=problem_id)
     fout=open(str(settings.BASE_DIR)+"/"+"ojapp\prob1_out.txt","w")
@@ -101,17 +94,6 @@ def submitProblem(request,problem_id):
         except:
             verdict='Time Limit Exceeded'
             fout.write(verdict)
-    # fin1.close()
-    # fout.close()
-    # faout=open("E:\Django\OJ\ojapp\prob_actualout.txt","w")
-    # faout.write(str(problem.output))
-    # faout.close()
-    # out1="E:\Django\OJ\ojapp\prob_actualout.txt"
-    # out2="E:\Django\OJ\ojapp\prob1_out.txt"
-    # if (filecmp.cmp(out1,out2)):
-    #     verdict='Accepted'
-    # else:
-    #     verdict='Wrong Answer'
     s=Solution.objects.filter(username=request.user,problem=problem,verdict='Accepted')
     print(s.count())
     if s.count()==0:
@@ -152,12 +134,6 @@ def submitProblem(request,problem_id):
 
     while(outp2.endswith('\n')):
         outp2=outp2[:-1]
-    # f= open(str(settings.BASE_DIR)+"/"+"ojapp/prob_actualout.txt","w")
-    # # f.write(str(outp2))
-    # f.close()
-
-    # out1=str(settings.BASE_DIR)+"/"+"ojapp/prob_actualout.txt"
-    # out2=str(settings.BASE_DIR)+"/"+"ojapp/prob1_out.txt"
     if verdict!='Time Limit Exceeded':
         # if (filecmp.cmp(out1,out2)):
         if (outp==outp2):
@@ -196,6 +172,7 @@ def submitProblem(request,problem_id):
     return render(request,'verdict.html',{'solution':solution})
     
 
+# This code will use docker.
 # @login_required
 # def submitProblem(request,problem_id):
 #     code1=request.POST.get("code")
